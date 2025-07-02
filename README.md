@@ -1,65 +1,104 @@
-# Instructions:
-This is a helper setup project for anyone wanting to make a vulkan application in C++.
-Everything is selfcontained you don't need to install any libraries because everything is in the extern folder.
+# Vulkan C++ Application Starter
 
+This is a starter project for anyone wanting to create a Vulkan application in C++. Everything is **self-contained** — no need to install external libraries manually, as all required libraries are included in the `extern/` folder.
 
-## extern folder (Optional)
-This folder contains all the libraries you need to compile a vulkan application in C++. It contains (glfw, glm, vulkan-headers, vulkan-loader)
-You can also delete the extern folder and set it up yourself for security reasons or if you want the lastest versions, just find the git repos for (glfw, glm, vulkan-headers, vulkan-loader) and clone them from github in the extern folder (Basicaly what I alreasy did).
+---
 
-[glfw](https://github.com/glfw/glfw), [glm](https://github.com/g-truc/glm), [Vulkan-Loader](https://github.com/KhronosGroup/Vulkan-Loader) and [Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers)
+## 📂 Project Structure
 
-## CMakeLists.txt
+* **`extern/`**
+  Contains all the libraries needed to compile a Vulkan application in C++:
 
-The Cmake is already set up you can open it and see what things you can change (like executable name, or project name or include paths etc...). It is commented so you can know which lines to change and which ones you should not touch.
+  * [GLFW](https://github.com/glfw/glfw)
 
-## compile.bat and compile.sh
+  * [GLM](https://github.com/g-truc/glm)
 
-Sorry mac users I don't have a mac so I can't make a compile script for you, for the others these scripts are used to compile the shaders later on in the vulkan tutorial. I know there is a way to make this also selfcontained but for this one thing You need to install the Vulkan SDK (basically just a folder) and find the glslc.exe, the rest is commented in the scripts so you can know what to change.
+  * [Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers)
 
-## shaders folder
+  * [Vulkan-Loader](https://github.com/KhronosGroup/Vulkan-Loader)
 
-this contains the shader code you wrtie and and the copiled shaders, you can change the .bat or .sh if you want your compiled shaders to be in a different folder.
+  > **Note:** You can delete this folder and set up these dependencies yourself (for security reasons or to get the latest versions). Simply clone the above repositories into `extern/` (which is just what I did).
 
-## src folder
-This is where you write your C++ code, you can add more files here and include them in the CMakeLists.txt if you want to. The main.cpp file is just a template for you to start with, you can delete it and write your own code. Just remeber if you add any new folders/cpp files make sure to let Cmake know about them in the CMakeLists.txt file.
+---
 
-## include folder
-I like to but all my .h and .hpp header files in a single include folder that way I just tell my Cmake where my include folder is and all my includes work. You can also Modify this in the CMakeLists.txt file if you want to change the include path or make your own thing.
+* **`src/`**
+  This is where your C++ code lives. The provided `main.cpp` is a minimal starting point — feel free to replace it. If you add new source files, don't forget to include them in the `CMakeLists.txt`.
 
-## How to build
-This will work best with Visual Studio because it has CMake support built in, but you can also use any other CMake compatible IDE or command line tool.
+* **`include/`**
+  Place your `.h` / `.hpp` files here. This allows you to set a single include path in CMake and keep things organized. Of course you can change this but if you do you should also not forget to modify the `CmakeLists.txt`
 
-If you are like me (use the commandline/mingw and vscode) you can buid the project by running the following commands in the terminal:
+* **`shaders/`**
+  Contains shader source files and compiled shader binaries (useful later down the line in the vulkan tutorial). You can modify the `.bat` or `.sh` scripts to change output locations for compiled shaders.
 
-#### For linux users:
+* **`CMakeLists.txt`**
+  The build configuration. It's already set up for you, but you can customize the project name, executable name, include paths, etc. Comments in the file will guide you.
+
+* **`compile.bat` / `compile.sh`**
+  Scripts for compiling shaders. These require the Vulkan SDK (for `glslc.exe` or `glslc`). You'll need to adjust these scripts with the path to your Vulkan SDK.
+  No script for Mac users sorry...
+
+---
+
+## ⚙️ How to Build
+
+### 🛠 Command-line / Terminal
+
+#### On Linux:
+
 ```bash
 mkdir build
 cd build
 cmake ..
 make
+./executable_name
 ```
-#### For windows users (mingw):
+
+#### On Windows (with MinGW):
+
 ```bash
 mkdir build
 cd build
 cmake .. -G "MinGW Makefiles"
 mingw32-make
+executable_name.exe
 ```
-and then for both run the .exe (windows) or the binary file (linux) in the build folder.
 
-#### For Visual Studio users:
-I've never used Visual Studio but I think you can just open the CMakeLists.txt file in Visual Studio and it will automatically generate the project files for you, then you can build the project from there.
+After building, you'll find the executable in the `build/` directory. The executable_name is just tuto but you can change this easily in the `CMakeLists.txt` file.
 
-#### For mac users:
-I don't have a mac soooo... unlucky
+---
 
-## (Optional) IDE setup for intellisense
-If you want to use intellisense in your IDE (the squiggly lines that tell you if you have a syntax error or not)
+### 🛠 Using an IDE
 
-#### For VScode users:
+#### Visual Studio:
 
-you can set it up on vscode by installing the C/C++ extension and then typing "ctrl+shift+p" and then typing "C/C++: Edit Configurations (UI)" and then look for compiler path and set it to your compiler path (for example "C:/mingw/bin/g++.exe" for mingw on windows) and then look for "Include path" and add the path to your include folder + all the libs included for example :
+You can open the `CMakeLists.txt` file directly in Visual Studio. It should automatically configure the project, and you can build it from within the IDE.
+
+#### VSCode:
+
+You can build using:
+
+* The **CMake Tools** extension — click *Build* from the status bar or use the command palette.
+* The command-line instructions above, if you prefer the terminal.
+
+---
+
+## 💡 (Optional) Setting Up Intellisense (VSCode)
+
+For better code completion and error highlighting:
+
+1️⃣ Install the **C/C++ extension** for VSCode.
+
+2️⃣ Open the command palette (`Ctrl+Shift+P`), search for:
+
+```
+C/C++: Edit Configurations (UI)
+```
+
+3️⃣ In the configuration UI:
+
+* **Compiler path:** Set this to your compiler (e.g. `C:/mingw/bin/g++.exe` for MinGW on Windows).
+* **Include path:** Add the following:
+
 ```plaintext
 ${default}
 ${workspaceFolder}/extern/glfw/include
@@ -68,8 +107,14 @@ ${workspaceFolder}/extern/Vulkan-Headers/include
 ${workspaceFolder}/include
 ```
 
-the last one is the include folder in the root of the project, as I said that one is customizable in the CMakeLists.txt file so you can change it to whatever you want. But if you do change it here also.
+If you change the include folder in `CMakeLists.txt`, remember to update it here too.
 
-#### For others:
+---
 
-Set it up yourselves, it should be easy to do for Visual Studio, CLion, Qt Creator, etc... just look for the C/C++ extension and set the include paths to the same as above.
+## 💡 (Optional) Setting Up Intellisense (Other IDEs)
+
+Good luck!
+
+## ⛔ Notes for Mac Users
+
+Currently, no compile scripts or specific instructions are provided for macOS. However, you can set it up similarly by cloning the dependencies and adjusting the build process as needed. If any mac users are kind enough to update this and do a pull request I'll gladly pull it for future users.
